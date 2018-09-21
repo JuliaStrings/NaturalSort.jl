@@ -2,28 +2,41 @@ module NaturalSort
 export natural
 
 function natural(x::AbstractString, y::AbstractString)
-    statex = start(x)
-    statey = start(y)
+    cx, statex = iterate(x)
+    cy, statey = iterate(y)
+
     donex = false
     doney = false
-    while !(donex = done(x, statex)) & !(doney = done(y, statey))
-        cx, statex = next(x, statex)
-        cy, statey = next(y, statey)
-        if isnumber(cx) && isnumber(cy)
+    i = 0
+    while !(donex) & !(doney)
+        i += 1
+        if isnumeric(cx) && isnumeric(cy)
             # Skip leading zeros
-            while cx == '0' && !(donex = done(x, statex))
-                cx, statex = next(x, statex)
+            while cx == '0' && !donex
+                x_it = iterate(x, statex)
+
+                if x_it != nothing
+                    cx, statex = x_it
+                else
+                    donex = true
+                end
             end
-            while cy == '0' && !(doney = done(y, statey))
-                cy, statey = next(y, statey)
+
+            while cy == '0' && !doney
+                y_it = iterate(y, statey)
+                if y_it != nothing
+                    cy, statey = y_it
+                else
+                    doney = true
+                end
             end
 
             # Begin comparing numbers
             diff = false
             lt = false
             while true
-                isnumx = isnumber(cx)
-                isnumy = isnumber(cy)
+                isnumx = isnumeric(cx)
+                isnumy = isnumeric(cy)
                 if isnumx && isnumy
                     if !diff && cx != cy
                         # Keep track of how numbers differ, in case the lengths match
@@ -31,13 +44,47 @@ function natural(x::AbstractString, y::AbstractString)
                         lt = cx < cy
                     end
 
-                    donex = done(x, statex)
-                    doney = done(y, statey)
+                    x_it = iterate(x, statex)
+                    y_it = iterate(y, statey)
+
+                    if x_it != nothing
+                        cx, statex = x_it
+                    else
+                        donex = true
+                    end
+
+                    if y_it != nothing
+                        cy, statey = y_it
+                    else
+                        doney = true
+                    end
+
                     if donex || doney
-                        if donex && !doney && isnumber(next(y, statey)[1])
+
+                        if donex && !doney
+                            it_y = iterate(y, statey)
+
+                            if y_it != nothing
+                                cy, statey = y_it
+                            else
+                                doney = true
+                            end
+
+                        elseif doney && !donex
+                            it_x = iterate(x, statex)
+
+
+                            if x_it != nothing
+                                cx, statex = x_it
+                            else
+                                donex = true
+                            end
+                        end
+
+                        if donex && !doney && isnumeric(cy)
                             # Number in y is longer than number in x
                             return true
-                        elseif !donex && doney && isnumber(next(x, statex)[1])
+                        elseif !donex && doney && isnumeric(cx)
                             # Number in x is longer than number in y
                             return false
                         end
@@ -45,8 +92,6 @@ function natural(x::AbstractString, y::AbstractString)
                         return diff ? lt : donex && !doney
                     end
 
-                    cx, statex = next(x, statex)
-                    cy, statey = next(y, statey)
                 elseif isnumx
                     # Number in x is longer than number in y
                     return false
@@ -65,6 +110,22 @@ function natural(x::AbstractString, y::AbstractString)
         if cx != cy
             return cx < cy
         end
+
+        x_it = iterate(x, statex)
+        y_it = iterate(y, statey)
+
+        if x_it != nothing
+            cx, statex = x_it
+        else
+            donex = true
+        end
+
+        if y_it != nothing
+            cy, statey = y_it
+        else
+            doney = true
+        end
+
     end
 
     return donex && !doney
