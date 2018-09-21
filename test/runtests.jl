@@ -22,26 +22,14 @@ STRS = [
     "b"
 ]
 
-# println(sort(["b##", "b#!##", "1", "a#", "b"], lt=NaturalSort.natural))
-# println(sort(["a#", "b"], lt=NaturalSort.natural))
 
 for i = 1:length(STRS)
     for j = 1:i-1
-        # println("--- 1 ---")
-        # println("i ", i)
-        # println("j ", j)
-        # println("STRS[i] ", STRS[i], " STRS[j] ", STRS[j])
         result = NaturalSort.natural(STRS[j], STRS[i])
-        # println("result ", result)
         @test result
     end
     for j = i:length(STRS)
-        # println("--- 2 ---")
-        # println("i ", i)
-        # println("j ", j)
-        # println("STRS[i] ", STRS[i], " STRS[j] ", STRS[j])
         result = NaturalSort.natural(STRS[j], STRS[i])
-        # println("result ", result)
         @test !NaturalSort.natural(STRS[j], STRS[i])
     end
 end
@@ -53,14 +41,10 @@ EQ_STRS = [
 
 for (str, eqto) in EQ_STRS
     for i = 1:findfirst([j == eqto for j in STRS])-1
-        # println("i", i)
-        # println("STRS", STRS)
         @test NaturalSort.natural(STRS[i], str)
         @test !NaturalSort.natural(str, STRS[i])
     end
     for i = findfirst([j == eqto for j in STRS])+1:length(STRS)
-        # println("i", i)
-        # println("STRS", STRS)
         @test !NaturalSort.natural(STRS[i], str)
         @test NaturalSort.natural(str, STRS[i])
     end
