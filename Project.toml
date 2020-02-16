@@ -1,0 +1,11 @@
+name = "NaturalSort"
+uuid = "c020b1a1-e9b0-503a-9c33-f039bfc54a85"
+
+[compat]
+julia = "1.0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
