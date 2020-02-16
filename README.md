@@ -1,7 +1,7 @@
 # NaturalSort
 
-[![Build Status](https://travis-ci.org/simonster/NaturalSort.jl.svg?branch=master)](https://travis-ci.org/simonster/NaturalSort.jl)
-[![codecov.io](http://codecov.io/github/simonster/NaturalSort.jl/coverage.svg?branch=master)](http://codecov.io/github/simonster/NaturalSort.jl?branch=master)
+[![Build Status](https://travis-ci.org/JuliaStrings/NaturalSort.jl.svg?branch=master)](https://travis-ci.org/JuliaStrings/NaturalSort.jl)
+[![codecov.io](http://codecov.io/github/JuliaStrings/NaturalSort.jl/coverage.svg?branch=master)](http://codecov.io/github/JuliaStrings/NaturalSort.jl?branch=master)
 
 [Natural Sort Order](https://en.wikipedia.org/wiki/Natural_sort_order) in Julia
 
