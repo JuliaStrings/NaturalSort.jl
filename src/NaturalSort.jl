@@ -2,28 +2,26 @@ module NaturalSort
 export natural
 
 function natural(x::AbstractString, y::AbstractString)
-    statex = start(x)
-    statey = start(y)
-    donex = false
-    doney = false
-    while !(donex = done(x, statex)) & !(doney = done(y, statey))
-        cx, statex = next(x, statex)
-        cy, statey = next(y, statey)
-        if isnumber(cx) && isnumber(cy)
+    iterx = iterate(x)
+    itery = iterate(y)
+    while iterx !== nothing && itery !== nothing
+        cx, statex = iterx
+        cy, statey = itery
+        if isnumeric(cx) && isnumeric(cy)
             # Skip leading zeros
-            while cx == '0' && !(donex = done(x, statex))
-                cx, statex = next(x, statex)
+            while cx == '0' && (iterx = iterate(x, statex)) !== nothing
+                cx, statex = iterx
             end
-            while cy == '0' && !(doney = done(y, statey))
-                cy, statey = next(y, statey)
+            while cy == '0' && (itery = iterate(y, statey)) !== nothing
+                cy, statey = itery
             end
 
             # Begin comparing numbers
             diff = false
             lt = false
             while true
-                isnumx = isnumber(cx)
-                isnumy = isnumber(cy)
+                isnumx = isnumeric(cx)
+                isnumy = isnumeric(cy)
                 if isnumx && isnumy
                     if !diff && cx != cy
                         # Keep track of how numbers differ, in case the lengths match
@@ -31,22 +29,22 @@ function natural(x::AbstractString, y::AbstractString)
                         lt = cx < cy
                     end
 
-                    donex = done(x, statex)
-                    doney = done(y, statey)
-                    if donex || doney
-                        if donex && !doney && isnumber(next(y, statey)[1])
+                    iterx = iterate(x, statex)
+                    itery = iterate(y, statey)
+                    if iterx === nothing || itery === nothing
+                        if iterx === nothing && itery !== nothing && isnumeric(itery[1])
                             # Number in y is longer than number in x
                             return true
-                        elseif !donex && doney && isnumber(next(x, statex)[1])
+                        elseif iterx !== nothing && itery === nothing && isnumeric(iterx[1])
                             # Number in x is longer than number in y
                             return false
                         end
                         # Both numbers ended and same length
-                        return diff ? lt : donex && !doney
+                        return diff ? lt : iterx === nothing && itery !== nothing
                     end
 
-                    cx, statex = next(x, statex)
-                    cy, statey = next(y, statey)
+                    cx, statex = iterx
+                    cy, statey = itery
                 elseif isnumx
                     # Number in x is longer than number in y
                     return false
@@ -65,8 +63,10 @@ function natural(x::AbstractString, y::AbstractString)
         if cx != cy
             return cx < cy
         end
+        iterx = iterate(x, statex)
+        itery = iterate(y, statey)
     end
 
-    return donex && !doney
+    return itery == nothing && iterx != nothing
 end
 end # module

@@ -1,5 +1,5 @@
 using NaturalSort
-using Base.Test
+using Test
 
 # write your own tests here
 STRS = [
@@ -36,11 +36,11 @@ EQ_STRS = [
     ("a01b2", "a1b2")
 ]
 for (str, eqto) in EQ_STRS
-    for i = 1:findfirst(STRS, eqto)-1
+    for i = 1:findfirst(x->x == eqto, STRS)-1
         @test natural(STRS[i], str)
         @test !natural(str, STRS[i])
     end
-    for i = findfirst(STRS, eqto)+1:length(STRS)
+    for i = findfirst(x->x == eqto, STRS)+1:length(STRS)
         @test !natural(STRS[i], str)
         @test natural(str, STRS[i])
     end
