@@ -3,8 +3,10 @@ using Test
 
 # write your own tests here
 STRS = [
+    "",
     "a#",
-    "a0",
+    "a00",
+    "a0a",
     "a1",
     "a1b1",
     "a1b2",
@@ -33,7 +35,8 @@ end
 
 EQ_STRS = [
     ("a01", "a1"),
-    ("a01b2", "a1b2")
+    ("a01b2", "a1b2"),
+    ("a0", "a00")
 ]
 for (str, eqto) in EQ_STRS
     for i = 1:findfirst(x->x == eqto, STRS)-1

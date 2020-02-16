@@ -15,6 +15,9 @@ function natural(x::AbstractString, y::AbstractString)
             while cy == '0' && (itery = iterate(y, statey)) !== nothing
                 cy, statey = itery
             end
+            if iterx === nothing || itery === nothing
+                break
+            end
 
             # Begin comparing numbers
             diff = false
@@ -67,6 +70,6 @@ function natural(x::AbstractString, y::AbstractString)
         itery = iterate(y, statey)
     end
 
-    return itery == nothing && iterx != nothing
+    return iterx == nothing && itery != nothing
 end
 end # module
