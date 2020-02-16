@@ -1,5 +1,7 @@
 name = "NaturalSort"
 uuid = "c020b1a1-e9b0-503a-9c33-f039bfc54a85"
+authors = ["Simon Kornblith <simon@simonster.com>"]
+version = "1.0"
 
 [compat]
 julia = "1.0"
